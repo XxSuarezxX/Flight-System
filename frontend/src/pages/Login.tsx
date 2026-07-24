@@ -1,14 +1,18 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import Navbar from "../components/Navbar";
 import { login } from "../api/auth";
 
 function Login() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
 
     try {
@@ -17,12 +21,15 @@ function Login() {
         password,
       });
 
-      console.log(response);
+      // Guardar el JWT
+      localStorage.setItem("access_token", response.access_token);
 
-      alert("Login successful!");
+      alert("Login successful.");
+
+      navigate("/");
     } catch (error) {
       console.error(error);
-      alert("Invalid credentials.");
+      alert("Invalid email or password.");
     }
   };
 
