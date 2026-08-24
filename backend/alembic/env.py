@@ -9,6 +9,9 @@ from alembic import context
 from app.core.config import settings
 from app.database.base import Base
 from app.modules.auth.models.user import User
+from app.modules.location.models.country import Country
+from app.modules.location.models.city import City
+from app.modules.location.models.airport import Airport
 
 config = context.config
 

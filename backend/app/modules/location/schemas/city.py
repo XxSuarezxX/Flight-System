@@ -9,4 +9,4 @@ class CityResponse(BaseModel):
     id: uuid.UUID
     name: str
     country_id: uuid.UUID
-    
+        

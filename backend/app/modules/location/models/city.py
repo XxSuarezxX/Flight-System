@@ -13,3 +13,5 @@ class City(Base):
     country_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("countries.id"),nullable=False,)
     country: Mapped["Country"] = relationship(back_populates="cities")
     airports: Mapped[list["Airport"]] = relationship(back_populates="city")
+
+    print("City importado")

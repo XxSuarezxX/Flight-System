@@ -5,7 +5,6 @@ from app.modules.auth.exceptions.auth_exceptions import UserAlreadyExistExceptio
 from app.core.security import hash_password, verify_password, create_token
 from app.modules.auth.schemas.login import UserLogin, LoginResponse
 
-
 class UserService:
 
     def __init__(self, user_repository: UserRepository):

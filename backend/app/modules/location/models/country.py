@@ -4,6 +4,7 @@ from uuid import uuid4
 from sqlalchemy import String, Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database.base import Base
+from app.modules.location.models.city import City
 
 class Country(Base):
     __tablename__ = "countries"
@@ -12,3 +13,5 @@ class Country(Base):
     name: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     iso_code: Mapped[str] = mapped_column(String(2), nullable=False, unique=True)
     cities: Mapped[list["City"]] = relationship(back_populates="country")
+
+    print("Country importado")
