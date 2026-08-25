@@ -8,7 +8,6 @@ from uuid import UUID
 
 router = APIRouter(prefix="/locations", tags=["countries"])
 
-
 @router.post("/create_country", response_model=CountryResponse)
 async def create_country(country: CountryRequest, db: AsyncSession= Depends(get_db)):
     repository = CountryRepository(db)
