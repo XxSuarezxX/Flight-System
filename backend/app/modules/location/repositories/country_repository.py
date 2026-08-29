@@ -36,3 +36,8 @@ class CountryRepository:
         query = select(Country).where(Country.name == country_name)
         result = await self.db.scalar(query)
         return result
+    
+    async def get_country_by_iso_code(self, country_iso_code: str) -> Country | None:
+        query = select(Country).where(Country.iso_code == country_iso_code)
+        result = await self.db.scalar(query)
+        return result

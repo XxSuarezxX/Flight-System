@@ -13,11 +13,11 @@ class CountryService:
         existing_country = await self.country_repository.get_country_by_name(country.name)
 
         if existing_country:
-            raise  CountryAlreadyExistException
+            raise  CountryAlreadyExistException()
         existing_iso_country = await self.country_repository.get_country_by_iso_code(country.iso_code)
 
         if existing_iso_country:
-            raise  IsoCodeAlreadyExistException
+            raise  IsoCodeAlreadyExistException()
 
         new_country = Country(
             name=country.name,
@@ -31,7 +31,7 @@ class CountryService:
         existing_country = await self.country_repository.get_country_by_id(country_id)
 
         if not existing_country:
-            raise CountryNotFoundException
+            raise CountryNotFoundException()
         
         existing_name_country = await self.country_repository.get_country_by_name(country.name)
         if (existing_name_country and existing_name_country.id != existing_country.id):
@@ -39,7 +39,7 @@ class CountryService:
         
         existing_iso_country = await self.country_repository.get_country_by_iso_code(country.iso_code)
         if (existing_iso_country and existing_iso_country.id != existing_country.id):
-            raise IsoCodeAlreadyExistException
+            raise IsoCodeAlreadyExistException()
 
         existing_country.name = country.name
         existing_country.iso_code = country.iso_code
@@ -49,5 +49,5 @@ class CountryService:
         existing_country = await self.country_repository.get_country_by_id(country_id)
 
         if not existing_country:
-            raise CountryNotFoundException
+            raise CountryNotFoundException()
         return await self.country_repository.delete_country(existing_country)
