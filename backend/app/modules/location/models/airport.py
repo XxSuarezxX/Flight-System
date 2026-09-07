@@ -16,5 +16,5 @@ class Airport(Base):
     city_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("cities.id"),nullable=False,)
     city: Mapped["City"] = relationship(back_populates="airports")
 
-
-    print("Airport importado")
+    departing_flights: Mapped[list["Flight"]] = relationship(foreign_keys="Flight.origin_airport_id",back_populates="origin")
+    arriving_flights: Mapped[list["Flight"]] = relationship(foreign_keys="Flight.destination_airport_id",back_populates="destination")

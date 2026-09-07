@@ -42,4 +42,4 @@ class AirportRepository:
         query = select(Airport).where(Airport.icao_code == airport)
         result = await self.db.scalar(query)
         return result  
-
+    
