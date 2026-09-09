@@ -1,5 +1,4 @@
 from app.modules.flight.enums.flight_status import FlightStatus
-
 import uuid
 from uuid import uuid4
 from sqlalchemy import ForeignKey, String, Uuid
@@ -10,7 +9,6 @@ from datetime import datetime
 from decimal import Decimal
 from sqlalchemy import Numeric
 from sqlalchemy import Enum
-
 
 class Flight(Base):
     __tablename__ = "flights"

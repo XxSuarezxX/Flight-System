@@ -37,3 +37,8 @@ class FlightRepository:
         query = select(Flight).where(Flight.origin_airport_id == origin_airport_id)
         result = await self.db.scalar(query)
         return result
+    
+    async def search_flight_by_destination(self, destination_airport_id:UUID) -> Flight | None:
+        query = select(Flight).where(Flight.destination_airport_id == destination_airport_id)
+        result = await self.db.scalar(query)
+        return result
