@@ -2,6 +2,13 @@ from app.modules.flight.repositories.flight_repository import FlightRepository
 from app.modules.location.repositories.airport_repository import AirportRepository
 from app.modules.flight.schemas.flight import FlightRequest
 from app.modules.flight.models.flight import Flight
+from app.modules.flight.enums.flight_status import FlightStatus
+
+from app.modules.flight.exceptions.flight_exception import (FlightNotFoundException,
+                                                            OriginAirportNotFoundException,
+                                                            DestinationAirportNotFoundException,
+                                                            SameAirportException,
+                                                            InvalidFlightTimeException)
 from uuid import UUID
 
 class FlightService:
@@ -12,23 +19,25 @@ class FlightService:
 
     async def create_flight(self, flight: FlightRequest):
         if flight.origin_airport_id == flight.destination_airport_id:
-            raise #Excepcion personalizada
+            raise SameAirportException()
         
         if flight.arrival_at <= flight.departure_at:
-            raise #Excepcion personalizada
+            raise InvalidFlightTimeException()
 
         origin_airport = await self.airport_repository.get_airport_by_id(flight.origin_airport_id)
         if not origin_airport:
-            raise #Excepcion personalizada
+            raise OriginAirportNotFoundException()
 
         destination_airport = await self.airport_repository.get_airport_by_id(flight.destination_airport_id)
         if not destination_airport:
-            raise #Excepcion personalizada
+            raise DestinationAirportNotFoundException()
         
         new_flight = Flight(
             flight_number=flight.flight_number, origin_airport_id=flight.origin_airport_id,
             destination_airport_id=flight.destination_airport_id, departure_at=flight.departure_at,
-            arrival_at=flight.arrival_at, price=flight.price)
+            arrival_at=flight.arrival_at, price=flight.price,
+            status = FlightStatus.SCHEDULED)
+        
         return await self.flight_repository.create_flight(new_flight)
     
     async def read_flights(self):
@@ -37,21 +46,21 @@ class FlightService:
     async def update_flight(self, flight_id: UUID, flight: FlightRequest):
         existing_flight = await self.flight_repository.get_flight_by_id(flight_id)
         if not existing_flight:
-            raise #Excepcion personalizada
+            raise FlightNotFoundException()
 
         origin_airport = await self.airport_repository.get_airport_by_id(flight.origin_airport_id)
         if not origin_airport:
-            raise #Excepcion personalizada
+            raise OriginAirportNotFoundException()
 
         destination_airport = await self.airport_repository.get_airport_by_id(flight.destination_airport_id)
         if not destination_airport:
-            raise #Excepcion personalizada 
+            raise DestinationAirportNotFoundException()
 
         if flight.origin_airport_id == flight.destination_airport_id:
-            raise
+            raise SameAirportException()
 
         if flight.arrival_at <= flight.departure_at:
-            raise #Excepcion personalizada
+            raise InvalidFlightTimeException()
 
         existing_flight.flight_number = flight.flight_number
         existing_flight.origin_airport_id = flight.origin_airport_id
@@ -65,5 +74,5 @@ class FlightService:
     async def delete_flight(self, flight_id: UUID):
         existing_flight = await self.flight_repository.get_flight_by_id(flight_id)
         if not existing_flight:
-            raise #Excepcion personalizada
+            raise FlightNotFoundException()
         return await self.flight_repository.delete_flight(existing_flight)
