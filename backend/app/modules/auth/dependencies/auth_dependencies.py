@@ -1,17 +1,18 @@
 from typing import Annotated
+
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.security import decode_token
 from app.database.database import get_db
+from app.modules.auth.enums.role import Roles
 from app.modules.auth.repositories.user_repository import UserRepository
 from app.modules.auth.schemas.token import TokenData
 
 security = HTTPBearer()
 
 async def get_current_user(credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)],db: AsyncSession = Depends(get_db),):
-
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -32,6 +33,7 @@ async def get_current_user(credentials: Annotated[HTTPAuthorizationCredentials, 
             sub=sub,
             name=name,
             role=role,)
+
     except JWTError:
         raise credentials_exception
 
@@ -41,3 +43,11 @@ async def get_current_user(credentials: Annotated[HTTPAuthorizationCredentials, 
     if user is None:
         raise credentials_exception
     return user
+
+
+async def get_current_admin(current_user=Depends(get_current_user),):
+    if current_user.role != Roles.ADMIN:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin privileges required",)
+    return current_user

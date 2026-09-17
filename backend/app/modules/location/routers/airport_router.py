@@ -5,6 +5,7 @@ from app.modules.location.schemas.airport import AirportRequest, AirportResponse
 from app.modules.location.repositories.airport_repository import AirportRepository
 from app.modules.location.repositories.city_repository import CityRepository
 from app.modules.location.services.airport_service import AirportService
+from app.modules.auth.dependencies.auth_dependencies import get_current_admin
 from uuid import UUID
 
 router = APIRouter(prefix="/airports", tags=["airports"])
@@ -15,18 +16,18 @@ def get_airport_service(db: AsyncSession = Depends(get_db)) -> AirportService:
 
     return AirportService(airport_repository, city_repository)
 
-@router.post("/create_airport", response_model=AirportResponse)
+@router.post("/create_airport", response_model=AirportResponse, dependencies=[Depends(get_current_admin)])
 async def create_airport(airport: AirportRequest, service: AirportService = Depends(get_airport_service)):
     return await service.create_airport(airport)
 
-@router.get("/read_airport")
+@router.get("/read_airports")
 async def read_airport(service: AirportService = Depends(get_airport_service)):
     return await service.read_airports()
 
-@router.put("/update_airport/({airport_id})" , response_model=AirportResponse)
+@router.put("/update_airport/{airport_id}" , response_model=AirportResponse, dependencies=[Depends(get_current_admin)])
 async def update_airport(airport_id: UUID, airport: AirportRequest, service: AirportService = Depends(get_airport_service)):
     return await service.update_airport(airport_id, airport)
 
-@router.delete("/delete_city")
+@router.delete("/delete_airport/{airport_id}", dependencies=[Depends(get_current_admin)])
 async def delete_airport(airport_id: UUID, service: AirportService = Depends(get_airport_service)):
     return await service.delete_airport(airport_id)

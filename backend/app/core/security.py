@@ -18,7 +18,7 @@ def create_token(user: User) -> str:
     payload =  {
         "sub": str(user.id),
         "name": user.first_name,
-        "role": str(user.role),
+        "role": user.role.value,
         "exp": datetime.utcnow() + timedelta(seconds=settings.SESSION_TIMEOUT)}
     token_jwt = jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     

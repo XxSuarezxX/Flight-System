@@ -32,6 +32,11 @@ class AirportRepository:
         query = select(Airport).where(Airport.id == airport)
         result = await self.db.scalar(query)
         return result
+    
+    async def get_airport_by_city_id(self, city_id: UUID) -> Airport | None:
+        query = select(Airport).where(Airport.city_id == city_id)
+        result = await self.db.scalar(query)
+        return result
 
     async def get_airport_by_iata_code(self, airport: str) -> Airport | None:
         query = select(Airport).where(Airport.iata_code == airport)

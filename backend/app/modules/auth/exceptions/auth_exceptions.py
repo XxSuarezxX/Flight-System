@@ -6,3 +6,9 @@ class InvalidCredentialsException(Exception):
 
 class UnauthorizedException(Exception):
     pass
+
+class UserNotFoundException(Exception):
+    pass
+
+class EmailAlreadyExistException(Exception):
+    pass

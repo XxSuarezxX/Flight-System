@@ -1,15 +1,17 @@
 from app.modules.location.repositories.city_repository import CityRepository
 from app.modules.location.repositories.country_repository import CountryRepository
+from app.modules.location.repositories.airport_repository import AirportRepository
 from app.modules.location.schemas.city import CityRequest
 from app.modules.location.models.city import City
-from app.modules.location.exceptions.location_exceptions import (CityAlreadyExistException, CountryNotFoundException, CityNotFoundException,)
+from app.modules.location.exceptions.location_exceptions import (CityAlreadyExistException, CountryNotFoundException, CityNotFoundException, CityHasAirportException)
 from uuid import UUID
 
 class CityService:
 
-    def __init__(self,city_repository: CityRepository, country_repository: CountryRepository):
+    def __init__(self,city_repository: CityRepository, country_repository: CountryRepository, airport_repository: AirportRepository):
         self.city_repository = city_repository
         self.country_repository = country_repository
+        self.airport_repository = airport_repository
 
     async def create_city(self, city: CityRequest):
         existing_city = await self.city_repository.get_city_by_name_and_country(city.name,city.country_id)
@@ -31,10 +33,11 @@ class CityService:
         if not existing_city:
             raise CityNotFoundException()
 
-        existing_name = await self.city_repository.get_city_by_name_and_country(city.name, existing_city.country_id)
+        existing_name = await self.city_repository.get_city_by_name_and_country(city.name, city.country_id)
         if existing_name and existing_name.id != existing_city.id:
             raise CityAlreadyExistException()
         existing_city.name = city.name
+        existing_city.country_id = city.country_id
 
         return await self.city_repository.update_city(existing_city)
 
@@ -43,4 +46,7 @@ class CityService:
         if not existing_city:
             raise CityNotFoundException()
 
+        existing_airport = await self.airport_repository.get_airport_by_city_id(city_id)
+        if existing_airport:
+            raise CityHasAirportException()
         return await self.city_repository.delete_city(existing_city)

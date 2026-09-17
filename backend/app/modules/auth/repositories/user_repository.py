@@ -22,3 +22,17 @@ class UserRepository:
         await self.db.commit()
         await self.db.refresh(user)
         return user
+    
+    async def read_users(self):
+        result = await self.db.execute(select(User))
+        users = result.scalars().all()
+        return users
+    
+    async def update_users(self, user: User) -> User:
+        await self.db.commit()
+        await self.db.refresh(user)
+        return user
+    
+    async def delete_user(self, user: User) -> None:
+        await self.db.delete(user)
+        await self.db.commit()

@@ -16,8 +16,10 @@ class CityAlreadyExistException(Exception):
 class CountryNotFoundException(Exception):
     pass
 
-
 class CityNotFoundException(Exception):
+    pass
+
+class CityHasAirportException(Exception):
     pass
 
 #Excepciones para airport

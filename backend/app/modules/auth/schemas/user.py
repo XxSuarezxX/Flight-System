@@ -3,12 +3,13 @@ from datetime import datetime
 from app.modules.auth.enums.role import Roles
 import uuid
 
-class UserCreate(BaseModel):
+class UserRequest(BaseModel):
     first_name: str
     last_name: str
     email: EmailStr
     password: str
     phone_number: str
+    role: Roles
 
 class UserResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)

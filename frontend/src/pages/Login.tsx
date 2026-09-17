@@ -1,14 +1,22 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 import Navbar from "../components/Navbar";
+import Notification from "../components/Notification";
 import { login } from "../api/auth";
+
+interface TokenPayload {
+  role: string;
+}
 
 function Login() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [notification, setNotification] = useState<string | null>(null);
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
@@ -21,15 +29,21 @@ function Login() {
         password,
       });
 
-      // Guardar el JWT
-      localStorage.setItem("access_token", response.access_token);
+      const token = response.access_token;
 
-      alert("Login successful.");
+      localStorage.setItem("access_token", token);
 
-      navigate("/");
+      const decodedToken = jwtDecode<TokenPayload>(token);
+
+      if (decodedToken.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/flights");
+      }
+
     } catch (error) {
       console.error(error);
-      alert("Invalid email or password.");
+      setNotification("Invalid email or password.");
     }
   };
 
@@ -37,10 +51,16 @@ function Login() {
     <>
       <Navbar />
 
+      {notification && (
+        <Notification
+          message={notification}
+          onClose={() => setNotification(null)}
+        />
+      )}
+
       <main className="min-h-[calc(100vh-72px)] bg-slate-100 flex items-center justify-center px-8 py-10">
         <div className="w-full max-w-6xl bg-white rounded-2xl shadow-2xl overflow-hidden grid grid-cols-2">
 
-          {/* Panel izquierdo */}
           <section className="bg-gradient-to-br from-blue-700 to-cyan-500 text-white flex flex-col justify-center p-14">
             <h1 className="text-5xl font-bold leading-tight mb-6">
               Welcome to
@@ -54,7 +74,6 @@ function Login() {
             </p>
           </section>
 
-          {/* Panel derecho */}
           <section className="flex items-center justify-center p-12">
             <div className="w-full max-w-md">
 

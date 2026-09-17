@@ -9,7 +9,8 @@ from app.modules.location.exceptions.location_exceptions import (
     CityNotFoundException,
     AirportNotFoundException,
     IataCodeAlreadyExistException,
-    IcaoCodeAlreadyExistException,)
+    IcaoCodeAlreadyExistException,
+    CityHasAirportException,)
 
 
 async def country_already_exist_handler(request: Request, exc: CountryAlreadyExistException):
@@ -51,3 +52,8 @@ async def icao_code_already_exist_handler(request: Request, exc: IcaoCodeAlready
     return JSONResponse(
         status_code=409,
         content={"detail": "ICAO code already exists"})
+
+async def city_has_airport_handler(request: Request, exc: CityHasAirportException):
+    return JSONResponse(
+        status_code=409,
+        content={"detail": "Cannot delete city because it has associated airports."})
