@@ -43,7 +43,6 @@ function Register() {
       <main className="min-h-[calc(100vh-72px)] bg-slate-100 flex items-center justify-center px-8 py-10">
         <div className="w-full max-w-6xl bg-white rounded-2xl shadow-2xl overflow-hidden grid grid-cols-2">
 
-          {/* Panel izquierdo */}
           <section className="bg-gradient-to-br from-blue-700 to-cyan-500 text-white flex flex-col justify-center p-14">
             <h1 className="text-5xl font-bold leading-tight mb-6">
               Create your
@@ -57,7 +56,6 @@ function Register() {
             </p>
           </section>
 
-          {/* Panel derecho */}
           <section className="flex items-center justify-center p-12">
             <div className="w-full max-w-md">
 
@@ -158,7 +156,7 @@ function Register() {
                 <p className="text-center text-gray-600 text-sm">
                   Already have an account?{" "}
                   <Link
-                    to="/"
+                    to="/login"
                     className="text-blue-700 font-semibold hover:underline"
                   >
                     Login

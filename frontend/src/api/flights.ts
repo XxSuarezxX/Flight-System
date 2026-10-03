@@ -20,6 +20,12 @@ export interface FlightRequest {
   price: number;
 }
 
+export interface SearchFlightsRequest {
+  origin_airport_id: string;
+  destination_airport_id: string;
+  departure_at: string;
+}
+
 export const getFlights = async (): Promise<Flight[]> => {
   const response = await api.get("/flights/read_flights");
   return response.data;
@@ -47,4 +53,15 @@ export const deleteFlight = async (
   flightId: string
 ): Promise<void> => {
   await api.delete(`/flights/delete_flight/${flightId}`);
+};
+
+export const searchFlights = async (
+  data: SearchFlightsRequest
+): Promise<Flight[]> => {
+  const response = await api.post(
+    "/flights/search_flights",
+    data
+  );
+
+  return response.data;
 };

@@ -15,7 +15,7 @@ def get_users_service(db: AsyncSession = Depends(get_db)) -> UserService:
     user_repository = UserRepository(db)
     return UserService(user_repository)
 
-@router.post("/create_user", response_model=UserResponse, dependencies=[Depends(get_current_admin)])
+@router.post("/create_user", response_model=UserResponse)
 async def create_user(user: UserRequest, service: UserService = Depends(get_users_service)):
     return await service.create_user(user)
 

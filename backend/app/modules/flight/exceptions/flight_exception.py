@@ -12,3 +12,6 @@ class SameAirportException(Exception):
 
 class InvalidFlightTimeException(Exception):
     pass
+
+class NotAvailableFlightsException(Exception):
+    pass

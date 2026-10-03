@@ -38,7 +38,7 @@ function Login() {
       if (decodedToken.role === "admin") {
         navigate("/admin");
       } else {
-        navigate("/flights");
+        navigate("/profile");
       }
 
     } catch (error) {

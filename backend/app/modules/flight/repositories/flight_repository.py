@@ -1,7 +1,10 @@
 from app.modules.flight.models.flight import Flight
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, and_
 from uuid import UUID
+from datetime import datetime, time, timedelta, date
+from app.modules.flight.enums.flight_status import FlightStatus
+from app.modules.flight.schemas.flight import SearchFlights
 
 class FlightRepository:
 
@@ -42,3 +45,16 @@ class FlightRepository:
         query = select(Flight).where(Flight.destination_airport_id == destination_airport_id)
         result = await self.db.scalar(query)
         return result
+    
+    async def search_available_flights(self, flight: SearchFlights):  
+        start_of_day = datetime.combine(flight.departure_at, time.min)
+        start_of_next_day = start_of_day + timedelta(days=1)
+
+        query = select(Flight).where(and_(
+            Flight.origin_airport_id == flight.origin_airport_id,
+            Flight.destination_airport_id == flight.destination_airport_id,
+            Flight.departure_at >= start_of_day,
+            Flight.departure_at < start_of_next_day,
+            Flight.status == FlightStatus.SCHEDULED))
+        result =  await self.db.scalars(query)
+        return result.all()

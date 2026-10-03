@@ -16,6 +16,7 @@ from .flight_handlers import (
     destination_airport_not_found_handler,
     same_airport_handler,
     invalid_time_handler,
+    not_available_flights_handler
 )
 
 from .auth_handlers import (
@@ -44,15 +45,14 @@ from app.modules.flight.exceptions.flight_exception import (
     DestinationAirportNotFoundException,
     SameAirportException,
     InvalidFlightTimeException,
-)
+    NotAvailableFlightsException)
 
 from app.modules.auth.exceptions.auth_exceptions import (
     UserAlreadyExistException,
     InvalidCredentialsException,
     UnauthorizedException,
     UserNotFoundException,
-    EmailAlreadyExistException,
-)
+    EmailAlreadyExistException,)
 
 
 def register_exception_handlers(app):
@@ -130,6 +130,10 @@ def register_exception_handlers(app):
         InvalidFlightTimeException,
         invalid_time_handler
     )
+
+    app.add_exception_handler(
+        NotAvailableFlightsException,
+        not_available_flights_handler)
 
     # Auth exceptions
 

@@ -1,14 +1,15 @@
 from app.modules.flight.repositories.flight_repository import FlightRepository
 from app.modules.location.repositories.airport_repository import AirportRepository
-from app.modules.flight.schemas.flight import FlightRequest
+from app.modules.flight.schemas.flight import FlightRequest, SearchFlights
 from app.modules.flight.models.flight import Flight
 from app.modules.flight.enums.flight_status import FlightStatus
-
+from datetime import date
 from app.modules.flight.exceptions.flight_exception import (FlightNotFoundException,
                                                             OriginAirportNotFoundException,
                                                             DestinationAirportNotFoundException,
                                                             SameAirportException,
-                                                            InvalidFlightTimeException)
+                                                            InvalidFlightTimeException,
+                                                            NotAvailableFlightsException)
 from uuid import UUID
 
 class FlightService:
@@ -76,3 +77,9 @@ class FlightService:
         if not existing_flight:
             raise FlightNotFoundException()
         return await self.flight_repository.delete_flight(existing_flight)
+    
+    async def search_available_flights(self, flight: SearchFlights):
+        existing_flights = await self.flight_repository.search_available_flights(flight)
+        if not existing_flights:
+            raise NotAvailableFlightsException()
+        return existing_flights

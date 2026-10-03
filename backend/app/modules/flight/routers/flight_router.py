@@ -1,7 +1,7 @@
 from fastapi import Depends, APIRouter
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database.database import get_db
-from app.modules.flight.schemas.flight import FlightRequest, FlightResponse
+from app.modules.flight.schemas.flight import FlightRequest, FlightResponse, SearchFlights
 from app.modules.flight.repositories.flight_repository import FlightRepository
 from app.modules.location.repositories.airport_repository import AirportRepository
 from app.modules.flight.services.flight_service import FlightService
@@ -31,3 +31,7 @@ async def update_flight(flight_id: UUID, flight: FlightRequest, service: FlightS
 @router.delete("/delete_flight/{flight_id}", dependencies=[Depends(get_current_admin)])
 async def delete_flight(flight_id: UUID, service: FlightService = Depends(get_flight_service)):
     return await service.delete_flight(flight_id)
+
+@router.post("/search_flights", response_model=list[FlightResponse])
+async def search_available_flights(flight: SearchFlights, service: FlightService = Depends(get_flight_service)):
+    return await service.search_available_flights(flight)

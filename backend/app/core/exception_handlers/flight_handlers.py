@@ -6,7 +6,8 @@ from app.modules.flight.exceptions.flight_exception import (
     FlightNotFoundException,
     DestinationAirportNotFoundException,
     SameAirportException,
-    InvalidFlightTimeException)
+    InvalidFlightTimeException,
+    NotAvailableFlightsException)
 
 async def origin_airport_not_found_handler(request: Request, exc: OriginAirportNotFoundException):
     return JSONResponse(
@@ -32,3 +33,8 @@ async def invalid_time_handler(request: Request, exc: InvalidFlightTimeException
     return JSONResponse(
         status_code=400,
         content={"detail": "Arrival time must be after departure time"})
+
+async def  not_available_flights_handler(request: Request, exec: NotAvailableFlightsException):
+    return JSONResponse(
+        status_code=404,
+        content={"detail": "Flights not found"})
