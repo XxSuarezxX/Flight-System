@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+
 import Register from "../pages/Register";
 import Login from "../pages/Login";
 import AdminDashboard from "../pages/AdminDashboard";
@@ -10,24 +11,16 @@ import Users from "../pages/Users";
 import AdminLayout from "../pages/AdminLayout";
 import Home from "../pages/Home";
 import Profile from "../pages/Profile";
+import ReservationForm from "../pages/ReservationForm";
+import AvailableFlights from "../pages/AvailableFlights";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-  {
-    path: "/profile",
-    element: <Profile />,
-  },
+  { path: "/", element: <Home /> },
+  { path: "/flights/available", element: <AvailableFlights /> },
+  { path: "/login", element: <Login /> },
+  { path: "/register", element: <Register /> },
+  { path: "/profile", element: <Profile /> },
+  { path: "/reservations/new", element: <ReservationForm /> },
   {
     path: "/admin",
     element: <AdminLayout />,

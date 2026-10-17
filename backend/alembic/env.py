@@ -13,6 +13,8 @@ from app.modules.location.models.country import Country
 from app.modules.location.models.city import City
 from app.modules.location.models.airport import Airport
 from app.modules.flight.models.flight import Flight
+from app.modules.reservation.models.reservation import Reservation
+from app.modules.reservation.models.passenger import Passenger
 
 config = context.config
 

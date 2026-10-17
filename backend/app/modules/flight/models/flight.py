@@ -21,6 +21,7 @@ class Flight(Base):
     arrival_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), nullable=False)
     price: Mapped[Decimal] = mapped_column(Numeric(precision=12, scale=2), nullable=False)
     status: Mapped[FlightStatus] = mapped_column(Enum(FlightStatus), nullable=False)
-
+    
+    reservations: Mapped[list["Reservation"]] = relationship(back_populates="flight")
     origin: Mapped["Airport"] = relationship(foreign_keys=[origin_airport_id],back_populates="departing_flights")
     destination: Mapped["Airport"] = relationship(foreign_keys=[destination_airport_id],back_populates="arriving_flights")

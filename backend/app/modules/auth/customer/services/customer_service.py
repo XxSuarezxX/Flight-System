@@ -1,5 +1,5 @@
 from app.modules.auth.repositories.user_repository import UserRepository
-from app.modules.customer.schemas.user import CustomerProfileUpdate
+from app.modules.auth.customer.schemas.user import CustomerProfileUpdate
 from app.modules.auth.exceptions.auth_exceptions import UserNotFoundException
 from uuid import UUID
 

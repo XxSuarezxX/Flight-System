@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Plane, User, LogOut, ChevronDown, Pencil } from "lucide-react";
 
 function Navbar() {
   const navigate = useNavigate();
-
+  const location = useLocation();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
-  const token = localStorage.getItem("access_token");
-  const isAuthenticated = Boolean(token);
+  const isAuthenticated = Boolean(localStorage.getItem("access_token"));
+  const isProfilePage = location.pathname === "/profile";
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
@@ -47,34 +47,44 @@ function Navbar() {
             </>
           ) : (
             <>
-              <div className="relative">
-                <button
-                  type="button"
-                  onClick={() => setShowProfileMenu(!showProfileMenu)}
+              {!isProfilePage ? (
+                <Link
+                  to="/profile"
                   className="flex items-center gap-2 rounded-lg px-4 py-2 font-medium text-gray-600 transition hover:bg-gray-100 hover:text-blue-600"
                 >
                   <User className="h-4 w-4" />
-                  Configurar perfil
-                  <ChevronDown
-                    className={`h-4 w-4 transition-transform ${
-                      showProfileMenu ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
+                  Mi perfil
+                </Link>
+              ) : (
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setShowProfileMenu(!showProfileMenu)}
+                    className="flex items-center gap-2 rounded-lg px-4 py-2 font-medium text-gray-600 transition hover:bg-gray-100 hover:text-blue-600"
+                  >
+                    <User className="h-4 w-4" />
+                    Mi perfil
+                    <ChevronDown
+                      className={`h-4 w-4 transition-transform ${
+                        showProfileMenu ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
 
-                {showProfileMenu && (
-                  <div className="absolute right-0 top-full z-50 mt-2 w-52 rounded-xl border border-gray-100 bg-white p-2 shadow-lg">
-                    <Link
-                      to="/profile?edit=true"
-                      onClick={() => setShowProfileMenu(false)}
-                      className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-blue-50 hover:text-blue-600"
-                    >
-                      <Pencil className="h-4 w-4" />
-                      Editar perfil
-                    </Link>
-                  </div>
-                )}
-              </div>
+                  {showProfileMenu && (
+                    <div className="absolute right-0 top-full z-50 mt-2 w-52 rounded-xl border border-gray-100 bg-white p-2 shadow-lg">
+                      <Link
+                        to="/profile?edit=true"
+                        onClick={() => setShowProfileMenu(false)}
+                        className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-blue-50 hover:text-blue-600"
+                      >
+                        <Pencil className="h-4 w-4" />
+                        Editar perfil
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              )}
 
               <button
                 type="button"

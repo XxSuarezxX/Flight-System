@@ -7,10 +7,24 @@ from app.core.security import hash_password, verify_password, create_token
 from app.modules.auth.schemas.login import UserLogin, LoginResponse
 from uuid import UUID
 
+from app.modules.auth.schemas.user import UserRegisterRequest
+from app.modules.auth.enums.role import Roles
+
 class UserService:
 
     def __init__(self, user_repository: UserRepository):
-        self.user_repository = user_repository                                                                                          
+        self.user_repository = user_repository 
+
+    async def register_user(self, user: UserRegisterRequest):
+        user_data = UserRequest(
+            first_name=user.first_name,
+            last_name=user.last_name,
+            email=user.email,
+            password=user.password,
+            phone_number=user.phone_number,
+            role=Roles.CUSTOMER,
+        )
+        return await self.create_user(user_data)                                                                                         
 
     async def create_user(self, user: UserRequest):
         user_exist = await self.user_repository.get_user_by_email(user.email)

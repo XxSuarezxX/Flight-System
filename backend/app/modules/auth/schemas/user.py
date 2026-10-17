@@ -28,3 +28,11 @@ class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
+
+
+class UserRegisterRequest(BaseModel):
+    first_name: str
+    last_name: str
+    email: EmailStr
+    password: str
+    phone_number: str
