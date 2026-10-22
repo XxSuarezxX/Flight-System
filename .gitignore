@@ -1,28 +1,33 @@
-# Virtual environment
+# Python virtual environments
 venv/
+.venv/
 
 # Python
 __pycache__/
 *.py[cod]
 *.pyo
 
-# Environment variables
+# Environment variables and secrets
 .env
+.env.*
+!.env.example
 
 # IDE
 .vscode/
 .idea/
 
-# OS
+# Operating system
 .DS_Store
 Thumbs.db
 
-# Pytest
+# Testing and coverage
 .pytest_cache/
-
-# Coverage
 .coverage
 htmlcov/
 
-# Alembic cache
-*.pyc
+# Alembic
+**/__pycache__/
+
+# Frontend dependencies and build output
+node_modules/
+dist/
